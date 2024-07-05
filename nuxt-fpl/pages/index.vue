@@ -9,12 +9,10 @@
     async function getData(id){
         //check if id is valid? check api response status
         if (!isNaN(id)){
-            console.log(id)
             var number = Number(id)
             if (!isNaN(number) && number > 0){
                 errorMsg.value = false;
                 var a = await navigateTo("/myteam/"+id)
-                return;
             }
         }
         errorMsg.value = true;
