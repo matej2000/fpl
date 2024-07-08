@@ -10,16 +10,16 @@ export default {
   theme: {
     extend: {
       height: {
-        'fieldh': '40rem',
+        'fieldh': '55rem',
       },
       width: {
-        'fieldw': '25rem',
+        'fieldw': '35rem',
       },
       inset: {
         "goal": "4em",
         "def": "12em",
         "mid": "20em",
-        "att": "20em"
+        "att": "28em"
       }
     },
   },

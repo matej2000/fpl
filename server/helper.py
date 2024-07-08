@@ -24,3 +24,9 @@ def getGeneralInfo():
     if response.status_code == 200:
         return response.json()
     return None
+
+def getPlayersGameweekPoints(event):
+    response = requests.get("https://fantasy.premierleague.com/api/event/" + str(event) + "/live/")
+    if response.status_code == 200:
+        return response.json()
+    return None
