@@ -18,6 +18,11 @@
         var teamData = await sendRequestTeam(route.params.id, managerData.current_event)
         var generalInfo = await sendRequestGeneralInfo()
         var playerPoints = await sendRequestPoints(managerData.current_event)
+        var fixtures = await sendRequestFixtures(managerData.current_event)
+        var dictTeamNames = {}
+        for(var info of generalInfo.teams){
+            dictTeamNames[info.id] = info.short_name
+        }
         for (var x of teamData.picks){
             for (var i of generalInfo.elements){
                 if (i.id == x.element){
@@ -45,6 +50,18 @@
                 if (i.id == x.element){
                     x.total_points = i.stats.total_points
                     x.minutes = i.stats.minutes
+                    x.explain_points = i.explain
+                    for (var explain of x.explain_points){
+                        for (var fixture of fixtures){
+                            if(explain.fixture == fixture.id){
+                                explain.team_h = dictTeamNames[fixture.team_h]
+                                explain.team_h_score = fixture.team_h_score
+                                explain.team_a_score = fixture.team_a_score
+                                explain.team_a = dictTeamNames[fixture.team_a]
+                                break
+                            }
+                        }
+                    }
                     break
                 }
             }
@@ -148,6 +165,18 @@
         }
     }
 
+    async function sendRequestFixtures(event){
+        try {
+            const response = await axios.get("http://localhost:8000/fixtures?event=" + event);
+            if(response.status == 200){
+                return response.data
+            }
+            return null;
+        } catch (error) {
+            return null
+        }
+    }
+
     function getRowClass(position){
         return "grid-cols-" + position.length
     }
@@ -161,62 +190,85 @@
                 <h2 class="text-base pl-2">{{ managerData.player_first_name + " " + managerData.player_last_name}} </h2>
             </div>
             <div>
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="w-1/2">
-                        <div class="bg-[url('/assets/img/livefplpitch.svg')] w-fieldw h-fieldh bg-cover bg-center mt-10 ml-10 relative">
-                            <!--Goalkeeper-->
-                            <div class="content-center w-full pt-16"> 
-                                <Player :player="gk[0]" :x_position="'m-auto'" :y_position="'top-goal'"/>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="border-solid border-2 border-sky-500 col-span-3 md:col-span-2">
+<!--                         <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+ -->                        <div>
+                            <div class="">
+                                <div class="m-auto text-center w-max"><h1>Gameweek {{ managerData.current_event }}</h1></div>
+                                <div class="grid grid-cols-3 text-center">
+                                    <div class="pt-6">
+                                        <div class="text-sm sm:text-base"><p>Average points</p></div>
+                                        <div class="text-2xl"><p>49</p></div>
+                                    </div>
+                                    <div class="p-4 bg-blue-900 text-white rounded">
+                                        <div class="text-sm sm:text-base"><p>Final points</p></div>
+                                        <div class="text-5xl"><p>{{ managerData.summary_event_points }}</p></div>
+                                    </div>
+                                    <div class="pt-6">
+                                        <div class="text-sm sm:text-base"><p>Highest points</p></div>
+                                        <div class="text-2xl"><p>150</p></div>
+                                    </div>
+
+                                </div>
                             </div>
-                            <!--<div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-goal absolute"></div>-->
-                            <!--Defense-->
-                            <div :class="getRowClass(def)" class="content-center w-full grid mt-5">
-                                <Player v-if="def.length!=4" :player="def[0]" :x_position="'left-40'" :y_position="'top-def'"/>
-                                <Player :player="def[1]" :x_position="'left-30'" :y_position="'top-def'"/>
-                                <Player :player="def[2]" :x_position="'right-2'" :y_position="'top-def'"/>
-                                <Player v-if="def.length>3" :player="def[3]" :x_position="'left-20'" :y_position="'top-def'"/>
-                                <Player v-if="def.length>3" :player="def.length==4 ? def[0] : def[4]" :x_position="'right-20'" :y_position="'top-def'"/>
-                            </div>
-                                <!--<div class="left-40 top-def absolute">
-                                <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover"></div>
-                                <div class="text-center"><p>Salah</p></div>
-                            </div>
-                            <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-def absolute"></div>
-                            <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-def absolute"></div>
-                            <div v-if="def.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-20 top-def absolute"></div>
-                            <div v-if="def.length>4" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-20 top-def absolute"></div>-->
-                            <!--mid-->
-                            <div class="content-center w-full grid mt-5" :class="getRowClass(mid)">
-                                <Player v-if="mid.length!=4" :player="mid[0]" :x_position="'left-40'" :y_position="'top-mid'"/>
-                                <Player :player="mid[1]" :x_position="'left-30'" :y_position="'top-mid'"/>
-                                <Player :player="mid[2]" :x_position="'right-2'" :y_position="'top-mid'"/>
-                                <Player v-if="mid.length>3" :player="mid[3]" :x_position="'left-20'" :y_position="'top-mid'"/>
-                                <Player v-if="mid.length>3" :player="mid.length==4 ? mid[0] : mid[4]" :x_position="'right-20'" :y_position="'top-mid'"/>
-                            </div>
-                                <!--
-                            <div v-if="mid.length!=4" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-mid absolute"></div>
-                            <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-mid absolute"></div>
-                            <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-mid absolute"></div>
-                            <div v-if="mid.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-20 top-mid absolute"></div>
-                            <div v-if="mid.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-20 top-mid absolute"></div>
-                            -->
-                            <!--Attack-->
-                            <div class="content-center w-full grid mt-5" :class="getRowClass(att)">
-                                <Player :player="att[0]"/>
-                                <Player v-if="att.length>1" :player="att[1]"/>
-                                <Player v-if="att.length>2" :player="att[2]"/>
-                            </div>
-                            <!--<div v-if="att.length==1 || att.length ==3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-att absolute"></div>
-                            <div v-if="att.length>1" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-att absolute"></div>
-                            <div v-if="att.length>1" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-att absolute"></div>-->
-                            <!--Reserves-->
-                            <div class="content-center w-full grid mt-10 grid-cols-4 bg-gray-200 pt-4 pb-4">
-                                <PlayerPosition v-for="r in reserves" :player="r"/>
+                            <div class="bg-[url('/assets/img/fpl_pitch.svg')] bg-cover bg-top mt-10 m-auto">
+                                <div class="max-w-[800px] m-auto pt-5">
+                                    <!--Goalkeeper-->
+                                    <div class="content-center w-full"> 
+                                        <Player :player="gk[0]" :x_position="'m-auto'" :y_position="'top-goal'"/>
+                                    </div>
+                                    <!--<div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-goal absolute"></div>-->
+                                    <!--Defense-->
+                                    <div :class="getRowClass(def)" class="content-center w-full grid mt-5">
+                                        <Player v-if="def.length!=4" :player="def[0]" :x_position="'left-40'" :y_position="'top-def'"/>
+                                        <Player :player="def[1]" :x_position="'left-30'" :y_position="'top-def'"/>
+                                        <Player :player="def[2]" :x_position="'right-2'" :y_position="'top-def'"/>
+                                        <Player v-if="def.length>3" :player="def[3]" :x_position="'left-20'" :y_position="'top-def'"/>
+                                        <Player v-if="def.length>3" :player="def.length==4 ? def[0] : def[4]" :x_position="'right-20'" :y_position="'top-def'"/>
+                                    </div>
+                                        <!--<div class="left-40 top-def absolute">
+                                        <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover"></div>
+                                        <div class="text-center"><p>Salah</p></div>
+                                    </div>
+                                    <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-def absolute"></div>
+                                    <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-def absolute"></div>
+                                    <div v-if="def.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-20 top-def absolute"></div>
+                                    <div v-if="def.length>4" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-20 top-def absolute"></div>-->
+                                    <!--mid-->
+                                    <div class="content-center w-full grid mt-5" :class="getRowClass(mid)">
+                                        <Player v-if="mid.length!=4" :player="mid[0]" :x_position="'left-40'" :y_position="'top-mid'"/>
+                                        <Player :player="mid[1]" :x_position="'left-30'" :y_position="'top-mid'"/>
+                                        <Player :player="mid[2]" :x_position="'right-2'" :y_position="'top-mid'"/>
+                                        <Player v-if="mid.length>3" :player="mid[3]" :x_position="'left-20'" :y_position="'top-mid'"/>
+                                        <Player v-if="mid.length>3" :player="mid.length==4 ? mid[0] : mid[4]" :x_position="'right-20'" :y_position="'top-mid'"/>
+                                    </div>
+                                        <!--
+                                    <div v-if="mid.length!=4" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-mid absolute"></div>
+                                    <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-mid absolute"></div>
+                                    <div class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-mid absolute"></div>
+                                    <div v-if="mid.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-20 top-mid absolute"></div>
+                                    <div v-if="mid.length>3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-20 top-mid absolute"></div>
+                                    -->
+                                    <!--Attack-->
+                                    <div class="content-center w-full grid mt-5" :class="getRowClass(att)">
+                                        <Player :player="att[0]"/>
+                                        <Player v-if="att.length>1" :player="att[1]"/>
+                                        <Player v-if="att.length>2" :player="att[2]"/>
+                                    </div>
+                                    <!--<div v-if="att.length==1 || att.length ==3" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-40 top-att absolute"></div>
+                                    <div v-if="att.length>1" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover left-30 top-att absolute"></div>
+                                    <div v-if="att.length>1" class="bg-[url('/assets/img/player_test.png')] w-20 h-20 bg-cover right-2 top-att absolute"></div>-->
+                                    <!--Reserves-->
+                                    <div class="content-center w-full grid mt-10 grid-cols-4 bg-gray-200 m-auto rounded-md pt-4 pb-4 bg-opacity-50 -p-10 max-w-[800px]">
+                                        <PlayerPosition v-for="r in reserves" :player="r"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="w-1/2">
-                        <h1>Gameweek {{ managerData.current_event }}</h1>
+                    <div class="w-full">
+                        <div class="bg-green-100"><h1>Gameweek {{ managerData.current_event }}</h1></div>
                         <h2>Points</h2>
                         <p>{{ managerData.summary_event_points }}</p>
                         <h2>Overall rank</h2>

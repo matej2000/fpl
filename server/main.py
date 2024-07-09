@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from helper import getManagerData, getHistory, getTeamData, getGeneralInfo, getPlayersGameweekPoints
+from helper import getManagerData, getHistory, getTeamData, getGeneralInfo, getPlayersGameweekPoints, getGameStats
 
 app = FastAPI()
 
@@ -63,6 +63,13 @@ async def info():
 async def points(event:int):
     try:
         return getPlayersGameweekPoints(event)
+    except ValueError:
+        return HTTPException(status_code=422, detail="Unprocessable Entity")
+    
+@app.get("/fixtures")
+async def fixtures(event:int):
+    try:
+        return getGameStats(event)
     except ValueError:
         return HTTPException(status_code=422, detail="Unprocessable Entity")
 

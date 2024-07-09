@@ -10,10 +10,10 @@ export default {
   theme: {
     extend: {
       height: {
-        'fieldh': '55rem',
+        'fieldh': '50rem',
       },
       width: {
-        'fieldw': '35rem',
+        'fieldw': '40rem',
       },
       inset: {
         "goal": "4em",

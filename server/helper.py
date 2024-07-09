@@ -30,3 +30,9 @@ def getPlayersGameweekPoints(event):
     if response.status_code == 200:
         return response.json()
     return None
+
+def getGameStats(event):
+    response = requests.get("https://fantasy.premierleague.com/api/fixtures?event=" + str(event))
+    if response.status_code == 200:
+        return response.json()
+    return None
