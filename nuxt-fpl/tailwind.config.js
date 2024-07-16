@@ -20,7 +20,12 @@ export default {
         "def": "12em",
         "mid": "20em",
         "att": "28em"
-      }
+      },
+      colors: {
+        'pl-primary': '#00ff85',
+        'pl-secondary': '#38003c',
+        'pl-third': '#04f5ff'
+      },
     },
   },
   plugins: [],
