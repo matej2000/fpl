@@ -91,7 +91,7 @@
             </div>
         </div>
         <div id="enter_id" class="align-middle bg-pl-secondary break-words">
-            <div class="sm:col-span-3 text-center align-baseline pt-20 pb-32">
+            <div class="sm:col-span-3 text-center align-baseline pt-24 pb-24">
                 <div class="m-auto w-full md:w-1/2">
                 <div class="ml-1 mr-1 font-bold text-md md:text-[5vmin] text-white break-word leading-snug">Enter your Fantasy premier league id, to check live rank, leagues and more</div>
                     <div class="mt-10 content-center ">
