@@ -216,7 +216,7 @@
 </script>
 
 <template>
-    <div v-if="showInfo" class="container mx-auto mt-20 ">
+    <div v-if="showInfo" class="container mx-auto mt-20 mb-20">
         <div v-if="managerData" class="max-w-[1300px] m-auto">
             <div class="mb-3">
                 <h1 class="text-2xl font-bold"> {{ managerData.name}}</h1>
