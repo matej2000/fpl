@@ -4,18 +4,27 @@
     
     const route = useRoute()
     var showInfo = false
-    var gk = []
-    var def = []
-    var mid = []
-    var att= []
-    var reserves = []
+    var gk = [{"web_name":"Areola", "total_points":"4.5", "team": "19", "is_captain":false, "is_vice_captain":false}]
+    var def = [{"web_name":"Burn", "total_points":"4.5", "team": "15", "is_captain":false, "is_vice_captain":false}, {"web_name":"Gabriel", "total_points":"6.0", "team": "1", "is_captain":false, "is_vice_captain":false}, {"web_name":"Pedro Porro", "total_points":"5.5", "team": "18", "is_captain":false, "is_vice_captain":false}]
+    var mid = [{"web_name":"Gordon", "total_points":"7.5", "team": "15", "is_captain":false, "is_vice_captain":false}, {"web_name":"Foden", "total_points":"9.5", "team": "13", "is_captain":false, "is_vice_captain":false}, {"web_name":"Saka", "total_points":"10.0", "team": "1", "is_captain":false, "is_vice_captain":true}, {"web_name":"Palmer", "total_points":"10.5", "team": "6", "is_captain":false, "is_vice_captain":false}]
+    var att= [{"web_name":"Watkins", "total_points":"9.0", "team": "2", "is_captain":false, "is_vice_captain":false}, {"web_name":"Darwin", "total_points":"7.5", "team": "12", "is_captain":false, "is_vice_captain":false}, {"web_name":"Isak", "total_points":"8.5", "team": "15", "is_captain":true, "is_vice_captain":false}]
+    var reserves = [{"web_name":"Turner", "total_points":"4.0", "team": "16", "element_type":"1"}, {"web_name":"Andersen", "total_points":"4.5", "team": "7", "element_type":"2"}, {"web_name":"Winks", "total_points":"4.5", "team": "11", "element_type":"2"}, {"web_name":"Taylor", "total_points":"4.0", "team": "17", "element_type":"2"}]
     var gameweek_stats = [0, 0, 0, 0, 0, 0]
     var current_event_data = {"average_entry_score":1}
     var managerData = await sendRequest(route.params.id)
+    console.log(managerData)
     if (Object.is(managerData, null) || "status_code" in managerData){ //|| "status_code" in manager.value){
         var a = await navigateTo("/?e=1", {external: true})
     }
-    else{
+    else if(managerData.current_event == null){
+        managerData.name = "FC Koper"
+        managerData.player_first_name = "Matej"
+        managerData.player_last_name = "Vatovec"
+        current_event_data = {"average_entry_score": "0", "highest_score":"0"}
+        managerData.summary_event_points = "0"
+        managerData.current_event = 1
+        showInfo = true
+    }else{
         var teamData = await sendRequestTeam(route.params.id, managerData.current_event)
         var generalInfo = await sendRequestGeneralInfo()
         var playerPoints = await sendRequestPoints(managerData.current_event)
@@ -209,7 +218,7 @@
 <template>
     <div v-if="showInfo" class="container mx-auto mt-20 ">
         <div v-if="managerData" class="max-w-[1300px] m-auto">
-            <div>
+            <div class="mb-3">
                 <h1 class="text-2xl font-bold"> {{ managerData.name}}</h1>
                 <h2 class="text-base pl-2">{{ managerData.player_first_name + " " + managerData.player_last_name}} </h2>
             </div>
