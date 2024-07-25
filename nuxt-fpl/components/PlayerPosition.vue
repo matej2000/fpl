@@ -93,7 +93,7 @@ const props = defineProps({
   },
 });
 const {player} = props;
-const team_path = "bg-[url('/assets/img/" + player.team + ".png')]"
+const team_path = "bg-[url('/assets/img/team_shirts/" + player.team + ".png')]"
 function getPosition(player){
     if (player.element_type == 1){
         return "GKP"

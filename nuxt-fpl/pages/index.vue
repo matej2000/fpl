@@ -109,9 +109,9 @@
                 <div v-for="index of fixtureData.length">
                     <div class="flex flex-col w-max m-auto mb-3">
                         <div v-if="index == 1 || fixtureData[index - 1].kickoff_time.split('T')[0] != fixtureData[index - 2].kickoff_time.split('T')[0]" class="text-center mt-5">
-                            {{ Date(Date.parse(fixtureData[index - 1].kickoff_time)).split(" ")[0] }}<!-- v-else-if="fixtureData[index].kickoff_time.split('T')[0] != fixtureData[Math.max(1, index-1)].kickoff_time.split('T')[0]" -->
-                            {{ Date(Date.parse(fixtureData[index - 1].kickoff_time)).split(" ")[2] }}
-                            {{ Date(Date.parse(fixtureData[index - 1].kickoff_time)).split(" ")[1] }}
+                            {{ (new Date(fixtureData[index - 1].kickoff_time)).toString().split(" ")[0] }} <!-- v-else-if="fixtureData[index].kickoff_time.split('T')[0] != fixtureData[Math.max(1, index-1)].kickoff_time.split('T')[0]" -->
+                            {{ (new Date(fixtureData[index - 1].kickoff_time)).toString().split(" ")[2] }}
+                            {{ (new Date(fixtureData[index - 1].kickoff_time)).toString().split(" ")[1] }}
                         </div>
                         <div class="flex w-max m-auto gap-3 text-center">
                             <div class="h-max m-auto w-12">

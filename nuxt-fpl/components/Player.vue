@@ -83,11 +83,11 @@
         </div>
       </Dialog>
     </TransitionRoot>
-  <!--<div v-if="false" class="bg-[url('/assets/img/1.png')] bg-[url('/assets/img/2.png')] bg-[url('/assets/img/3.png')] bg-[url('/assets/img/4.png')] bg-[url('/assets/img/5.png')]
-                           bg-[url('/assets/img/6.png')] bg-[url('/assets/img/7.png')] bg-[url('/assets/img/8.png')] bg-[url('/assets/img/9.png')] bg-[url('/assets/img/10.png')]
-                           bg-[url('/assets/img/11.png')] bg-[url('/assets/img/12.png')] bg-[url('/assets/img/13.png')] bg-[url('/assets/img/14.png')] bg-[url('/assets/img/15.png')]
-                           bg-[url('/assets/img/16.png')] bg-[url('/assets/img/17.png')] bg-[url('/assets/img/18.png')] bg-[url('/assets/img/19.png')] bg-[url('/assets/img/20.png')]"></div>
--->
+  <div v-if="false" class="bg-[url('/assets/img/team_shirts/1.png')] bg-[url('/assets/img/team_shirts/2.png')] bg-[url('/assets/img/team_shirts/3.png')] bg-[url('/assets/img/team_shirts/4.png')] bg-[url('/assets/img/team_shirts/5.png')]
+                           bg-[url('/assets/img/team_shirts/6.png')] bg-[url('/assets/img/team_shirts/7.png')] bg-[url('/assets/img/team_shirts/8.png')] bg-[url('/assets/img/team_shirts/9.png')] bg-[url('/assets/img/team_shirts/10.png')]
+                           bg-[url('/assets/img/team_shirts/11.png')] bg-[url('/assets/img/team_shirts/12.png')] bg-[url('/assets/img/team_shirts/13.png')] bg-[url('/assets/img/team_shirts/14.png')] bg-[url('/assets/img/team_shirts/15.png')]
+                           bg-[url('/assets/img/team_shirts/16.png')] bg-[url('/assets/img/team_shirts/17.png')] bg-[url('/assets/img/team_shirts/18.png')] bg-[url('/assets/img/team_shirts/19.png')] bg-[url('/assets/img/team_shirts/20.png')]"></div>
+
 </template>
 
 <script setup>
@@ -98,7 +98,7 @@ const props = defineProps({
   },
 });
 const {player} = props;
-const team_path = "bg-[url('/assets/img/" + player.team + ".png')]"
+const team_path = "bg-[url('/assets/img/team_shirts/" + player.team + ".png')]"
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 const open = ref(false)
